@@ -86,8 +86,13 @@ def shortcut_bytes(destination, target, icon):
                "$l=$s.CreateShortcut(" + quote(destination) + ");"
                "$l.TargetPath=" + quote(target) + ";$l.WorkingDirectory=" + quote(target.parent) + ";"
                "$l.IconLocation=" + quote(str(icon) + ',0') + ";$l.Save()")
-    subprocess.run(['powershell.exe', '-NoProfile', '-NonInteractive', '-Command', command],
-                   check=True, creationflags=subprocess.CREATE_NO_WINDOW)
+    command = '[Console]::OutputEncoding=[Text.Encoding]::UTF8;' + command
+    encoded = base64.b64encode(command.encode('utf-16-le')).decode('ascii')
+    result = subprocess.run(['powershell.exe', '-NoProfile', '-NonInteractive', '-EncodedCommand', encoded],
+                            capture_output=True, encoding='utf-8', errors='replace',
+                            creationflags=subprocess.CREATE_NO_WINDOW)
+    if result.returncode:
+        raise RuntimeError('Shortcut creation failed: ' + result.stderr)
     data = destination.read_bytes()
     destination.unlink()
     return data

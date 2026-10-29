@@ -69,7 +69,7 @@ class InstallTests(unittest.TestCase):
             config.write_text('model="keep"\n')
             real_write = installer.write
             def fail_config(path, data):
-                if path == config:
+                if path.resolve() == config.resolve():
                     raise OSError('simulated failure')
                 real_write(path, data)
             with patch.object(installer, 'write', fail_config):
