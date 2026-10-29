@@ -8,7 +8,7 @@
 
 ## 下载与安装
 
-1. 在 [Releases](https://github.com/beibeiweb/shuangling-codex-pet/releases/latest) 下载 `shuangling-codex-pet-windows-v1.0.0.zip`，或点击仓库的 **Code → Download ZIP**。
+1. 在 [Releases](https://github.com/beibeiweb/shuangling-codex-pet/releases/latest) 下载 `shuangling-codex-pet-windows-v1.0.1.zip`，或点击仓库的 **Code → Download ZIP**。
 2. 将 ZIP **完整解压**到普通文件夹。不要直接在压缩包里运行。
 3. 如果没有 Python，先从 [Python 官网](https://www.python.org/downloads/windows/) 安装 Python 3.11+，勾选加入 PATH，保留 Python Launcher 和 pythonw。
 4. 双击 `Install.cmd`。以当前用户安装，无需管理员权限。终端显示 `Installed` 才表示安装成功。
