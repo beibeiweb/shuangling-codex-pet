@@ -1,0 +1,17 @@
+__pycache__/
+*.pyc
+build/
+.local/
+dist/
+logs/
+qa/
+*.log
+state.json
+playback.lock
+installation.json
+.integration/
+*.dpapi*
+.env*
+auth.json
+config.toml
+imagegen-provider.json
