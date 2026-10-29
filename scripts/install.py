@@ -79,20 +79,40 @@ def locations(sandbox):
 
 
 def shortcut_bytes(destination, target, icon):
-    def quote(value):
-        return "'" + str(value).replace("'", "''") + "'"
+    # Use the Unicode shell interface directly; WScript.Shell can reject
+    # Unicode targets on Windows installations using a different code page.
+    import ctypes
+    import uuid
     destination.parent.mkdir(parents=True, exist_ok=True)
-    command = ("$ErrorActionPreference='Stop';$s=New-Object -ComObject WScript.Shell;"
-               "$l=$s.CreateShortcut(" + quote(destination) + ");"
-               "$l.TargetPath=" + quote(target) + ";$l.WorkingDirectory=" + quote(target.parent) + ";"
-               "$l.IconLocation=" + quote(str(icon) + ',0') + ";$l.Save()")
-    command = '[Console]::OutputEncoding=[Text.Encoding]::UTF8;' + command
-    encoded = base64.b64encode(command.encode('utf-16-le')).decode('ascii')
-    result = subprocess.run(['powershell.exe', '-NoProfile', '-NonInteractive', '-EncodedCommand', encoded],
-                            capture_output=True, encoding='utf-8', errors='replace',
-                            creationflags=subprocess.CREATE_NO_WINDOW)
-    if result.returncode:
-        raise RuntimeError('Shortcut creation failed: ' + result.stderr)
+    destination, target, icon = destination.resolve(), target.resolve(), icon.resolve()
+    def guid(value):
+        return (ctypes.c_ubyte * 16).from_buffer_copy(uuid.UUID(value).bytes_le)
+    def checked(result):
+        if result < 0:
+            raise OSError('Shell shortcut HRESULT 0x%08X' % (result & 0xffffffff))
+    def method(pointer, slot, *types):
+        table = ctypes.cast(pointer, ctypes.POINTER(ctypes.POINTER(ctypes.c_void_p))).contents
+        return ctypes.WINFUNCTYPE(ctypes.c_long, ctypes.c_void_p, *types)(table[slot])
+    ole = ctypes.OleDLL('ole32')
+    initialized = ole.CoInitializeEx(None, 2)
+    checked(initialized)
+    link, persist = ctypes.c_void_p(), ctypes.c_void_p()
+    try:
+        checked(ole.CoCreateInstance(ctypes.byref(guid('00021401-0000-0000-C000-000000000046')),
+                                     None, 1, ctypes.byref(guid('000214F9-0000-0000-C000-000000000046')),
+                                     ctypes.byref(link)))
+        checked(method(link, 20, ctypes.c_wchar_p)(link, str(target)))
+        checked(method(link, 9, ctypes.c_wchar_p)(link, str(target.parent)))
+        checked(method(link, 17, ctypes.c_wchar_p, ctypes.c_int)(link, str(icon), 0))
+        checked(method(link, 0, ctypes.c_void_p, ctypes.c_void_p)(link,
+                       ctypes.byref(guid('0000010B-0000-0000-C000-000000000046')), ctypes.byref(persist)))
+        checked(method(persist, 6, ctypes.c_wchar_p, ctypes.c_int)(persist, str(destination), 1))
+    finally:
+        if persist.value:
+            method(persist, 2)(persist)
+        if link.value:
+            method(link, 2)(link)
+        ole.CoUninitialize()
     data = destination.read_bytes()
     destination.unlink()
     return data
