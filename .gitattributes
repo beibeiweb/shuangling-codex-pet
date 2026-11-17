@@ -7,3 +7,9 @@
 *.ico binary
 *.mp4 binary
 *.exe binary
+
+# Keep checksum-protected metadata stable in Windows checkouts.
+pet-only/pet/pet.json text eol=lf
+pet-only/pet/package-manifest.json text eol=lf
+pet/pet.json text eol=lf
+pet/package-manifest.json text eol=lf
