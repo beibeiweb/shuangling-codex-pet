@@ -159,7 +159,7 @@ try {
         }
         Write-Json $manifestPath $record
     } catch { Restore-Current $before; throw }
-    Write-Output 'Installed pet. Refresh the Codex pet list and select Shuangling. Restart Codex if needed.'
+    Write-Output 'Installed pet. Refresh the Codex pet list and select DabaiLong (大白龙). Restart Codex if needed.'
 } catch {
     [Console]::Error.WriteLine(('ERROR: ' + $_.Exception.Message))
     exit 1

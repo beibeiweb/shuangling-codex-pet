@@ -1,14 +1,14 @@
-# 霜铃 · Codex 纯宠物
+# 大白龙 · Codex 纯宠物
 
-白发紫瞳的小龙娘霜铃。当前最新发布为 **纯宠物安装包**，不包含启动动画或语音，不需要 Python、管理员权限或 API 密钥。
+白发紫瞳的小龙娘大白龙。当前最新发布为 **纯宠物安装包**，不包含启动动画或语音，不需要 Python、管理员权限或 API 密钥。
 
-**[下载纯宠物安装包（约 2.7 MB）](https://github.com/beibeiweb/shuangling-codex-pet/releases/download/v2.0.0-pet/shuangling-pet-v2-enhanced.zip)** · [发布说明](https://github.com/beibeiweb/shuangling-codex-pet/releases/tag/v2.0.0-pet)
+**[下载纯宠物安装包（约 2.7 MB）](https://github.com/beibeiweb/shuangling-codex-pet/releases/download/v2.0.1-pet/shuangling-pet-v2-enhanced.zip)** · [发布说明](https://github.com/beibeiweb/shuangling-codex-pet/releases/tag/v2.0.1-pet)
 
 ## 安装与更新
 
 1. 下载上面的 `shuangling-pet-v2-enhanced.zip` 并完整解压。
 2. 双击 `Install.cmd`，出现 `Installed pet` 或 `Already up to date` 表示成功。
-3. 在 Codex 桌面版刷新宠物列表并重新选择「霜铃」；必要时重启 Codex。
+3. 在 Codex 桌面版刷新宠物列表并重新选择「大白龙」；必要时重启 Codex。
 
 仅支持 Windows；需要支持 sprite v2 自定义宠物的 Codex 桌面版。若下载的是仓库源码 ZIP，根目录 `Install.cmd` 同样只安装宠物，或直接运行 `pet-only/Install.cmd`。
 
